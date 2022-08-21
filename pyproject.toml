@@ -7,6 +7,7 @@ license = "BSD 3-Clause"
 readme = "README.md"
 repository = "https://github.com/estripling/datatoolbelt"
 documentation = "https://datatoolbelt.readthedocs.io/en/stable/"
+include = ["LICENSES/"]
 keywords = ["datatoolbelt"]
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -17,6 +18,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.8"
+pandas = "^1.4.3"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.1.2"
