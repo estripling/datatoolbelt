@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "datatoolbelt"
-version = "0.0.0"
+version = "0.1.0"
 description = "A package for data utility functions."
 authors = ["datatoolbelt Developers"]
 license = "BSD 3-Clause"
