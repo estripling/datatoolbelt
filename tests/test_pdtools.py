@@ -1,10 +1,14 @@
+import numpy as np
 import pandas as pd
+import pytest
 
 from datatoolbelt import pdtools
 
 
-def test_freq():
-    actual = pdtools.freq(["a", "c", "b", "g", "h", "a", "g", "a"])
+@pytest.mark.parametrize("datatype", [list, tuple, np.array, pd.Series])
+def test_freq(datatype):
+    values = datatype(["a", "c", "b", "g", "h", "a", "g", "a"])
+    actual = pdtools.freq(values)
     assert isinstance(actual, pd.DataFrame)
 
     expected = pd.DataFrame(
@@ -18,4 +22,4 @@ def test_freq():
         index=["a", "g", "c", "b", "h"],
     )
 
-    assert actual.equals(expected)
+    pd.testing.assert_frame_equal(actual, expected)

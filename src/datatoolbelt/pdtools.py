@@ -36,16 +36,16 @@ def freq(values):
     b  1  7  0.125  0.875
     h  1  8  0.125  1.000
     """
-    s = pd.Series(values).value_counts(
-        sort=True,
-        ascending=False,
-        bins=None,
-        dropna=False,
+    return pd.DataFrame(
+        data=pd.Series(values).value_counts(
+            sort=True,
+            ascending=False,
+            bins=None,
+            dropna=False,
+        ),
+        columns=["n"],
+    ).assign(
+        N=lambda df: df["n"].cumsum(),
+        r=lambda df: df["n"] / df["n"].sum(),
+        R=lambda df: df["r"].cumsum(),
     )
-
-    df = pd.DataFrame(s, columns=["n"])
-    df["N"] = df["n"].cumsum()
-    df["r"] = df["n"] / df["n"].sum()
-    df["R"] = df["r"].cumsum()
-
-    return df
