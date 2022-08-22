@@ -1,5 +1,6 @@
 """Pandas tools."""
 import pandas as pd
+from bumbag.core import flatten
 
 
 def freq(values):
@@ -49,3 +50,48 @@ def freq(values):
         r=lambda df: df["n"] / df["n"].sum(),
         R=lambda df: df["r"].cumsum(),
     )
+
+
+def join_pandas_dataframes_by_index(*dataframes):
+    """Join multiple dataframes by their index.
+
+    Parameters
+    ----------
+    dataframes : pandas.DataFrame or collection of pandas.DataFrame
+        Collection of dataframes to join.
+
+    Returns
+    -------
+    pandas.DataFrame
+        Joined dataframe.
+
+    Notes
+    -----
+    - It is a variadic function.
+    - It accepts a collection of dataframes and/or indvidual dataframes.
+
+    Examples
+    --------
+    >>> import pandas as pd
+    >>> df1 = pd.DataFrame([[1, 2], [3, 4]], columns=["a", "b"])
+    >>> df2 = pd.DataFrame([[5, 6], [7, 8]], columns=["c", "d"])
+    >>> df = join_pandas_dataframes_by_index(df1, df2)
+    >>> isinstance(df, pd.DataFrame)
+    True
+    >>> df
+       a  b  c  d
+    0  1  2  5  6
+    1  3  4  7  8
+
+    >>> df1 = pd.DataFrame([[1, 2], [3, 4]], index=[0, 1], columns=["a", "b"])
+    >>> df2 = pd.DataFrame([[5, 6], [7, 8]], index=[0, 2], columns=["c", "d"])
+    >>> df = join_pandas_dataframes_by_index([df1, df2])
+    >>> isinstance(df, pd.DataFrame)
+    True
+    >>> df
+         a    b    c    d
+    0  1.0  2.0  5.0  6.0
+    1  3.0  4.0  NaN  NaN
+    2  NaN  NaN  7.0  8.0
+    """
+    return pd.concat(flatten(dataframes), axis=1)

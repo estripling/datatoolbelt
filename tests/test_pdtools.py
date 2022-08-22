@@ -23,3 +23,21 @@ def test_freq(datatype):
     )
 
     pd.testing.assert_frame_equal(actual, expected)
+
+
+def test_join_pandas_dataframes_by_index():
+    idx = (0, 1)
+
+    cols1 = ("a", "b")
+    row11, row12 = (1, 2), (3, 4)
+    df1 = pd.DataFrame([row11, row12], idx, cols1)
+
+    cols2 = ("c", "d")
+    row21, row22 = (5, 6), (7, 8)
+    df2 = pd.DataFrame([row21, row22], idx, cols2)
+
+    expected = pd.DataFrame([row11 + row21, row12 + row22], idx, cols1 + cols2)
+
+    actual = pdtools.join_pandas_dataframes_by_index(df1, df2)
+    assert isinstance(actual, pd.DataFrame)
+    pd.testing.assert_frame_equal(actual, expected)
