@@ -2,13 +2,13 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from datatoolbelt import pdtools
+from datatoolbelt import pandastools
 
 
 @pytest.mark.parametrize("datatype", [list, tuple, np.array, pd.Series])
 def test_freq(datatype):
     values = datatype(["a", "c", "b", "g", "h", "a", "g", "a"])
-    actual = pdtools.freq(values)
+    actual = pandastools.freq(values)
     assert isinstance(actual, pd.DataFrame)
 
     expected = pd.DataFrame(
@@ -38,6 +38,6 @@ def test_join_pandas_dataframes_by_index():
 
     expected = pd.DataFrame([row11 + row21, row12 + row22], idx, cols1 + cols2)
 
-    actual = pdtools.join_pandas_dataframes_by_index(df1, df2)
+    actual = pandastools.join_pandas_dataframes_by_index(df1, df2)
     assert isinstance(actual, pd.DataFrame)
     pd.testing.assert_frame_equal(actual, expected)

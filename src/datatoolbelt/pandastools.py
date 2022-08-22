@@ -1,4 +1,3 @@
-"""Pandas tools."""
 import pandas as pd
 from bumbag.core import flatten
 
