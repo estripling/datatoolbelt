@@ -58,9 +58,8 @@ def join_dataframes_by_index(*dataframes):
     dataframes : sequence of pandas.DataFrame and pandas.Series
         Dataframes to join. Being a variadic function, it can handle in one
         call both cases when dataframes are given individually and when they
-        are given in a sequence. The function accepts pandas series too, since
-        they also have an index. If an object is of type pandas.Series, it is
-        joined as a column.
+        are given in a sequence. The function also accepts pandas series.
+        If an object is of type pandas.Series, it is converted to a dataframe.
 
     Returns
     -------
@@ -107,7 +106,7 @@ def join_dataframes_by_index(*dataframes):
     >>> isinstance(df, pd.DataFrame)
     True
     >>> df
-       0  1  2
+       0  0  0
     0  1  3  5
     1  2  4  6
 
@@ -124,7 +123,7 @@ def join_dataframes_by_index(*dataframes):
     2  NaN  4.0  5.0
     3  NaN  NaN  6.0
     """
-    return pd.concat(flatten(dataframes), axis=1)
+    return pd.concat(map(pd.DataFrame, flatten(dataframes)), axis=1)
 
 
 def union_dataframes_by_name(*dataframes):
@@ -227,8 +226,4 @@ def union_dataframes_by_name(*dataframes):
     2  NaN  NaN  5.0
     3  NaN  NaN  6.0
     """
-    it = (
-        obj.to_frame() if isinstance(obj, pd.Series) else obj
-        for obj in flatten(dataframes)
-    )
-    return pd.DataFrame(pd.concat(it, axis=0))
+    return pd.concat(map(pd.DataFrame, flatten(dataframes)), axis=0)
