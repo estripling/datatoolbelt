@@ -125,3 +125,110 @@ def join_dataframes_by_index(*dataframes):
     3  NaN  NaN  6.0
     """
     return pd.concat(flatten(dataframes), axis=1)
+
+
+def union_dataframes_by_name(*dataframes):
+    """Union multiple dataframes by their name.
+
+    Parameters
+    ----------
+    dataframes : sequence of pandas.DataFrame and pandas.Series
+        Dataframes to union. Being a variadic function, it can handle in one
+        call both cases when dataframes are given individually and when they
+        are given in a sequence. The function also accepts pandas series.
+        If an object is of type pandas.Series, it is converted to a dataframe.
+
+    Returns
+    -------
+    pandas.DataFrame
+        A new dataframe with all rows.
+
+    Notes
+    -----
+    Inspired by the unionByName method of spark dataframe.
+
+    Examples
+    --------
+    >>> df1 = pd.DataFrame([[1, 2], [3, 4]])
+    >>> df2 = pd.DataFrame([[5, 6], [7, 8]])
+    >>> df = union_dataframes_by_name(df1, df2)
+    >>> isinstance(df, pd.DataFrame)
+    True
+    >>> df
+       0  1
+    0  1  2
+    1  3  4
+    0  5  6
+    1  7  8
+
+    >>> df1 = pd.DataFrame([[1, 2], [3, 4]], index=[0, 1])
+    >>> df2 = pd.DataFrame([[5, 6], [7, 8]], index=[0, 2])
+    >>> df = union_dataframes_by_name([df1, df2])
+    >>> isinstance(df, pd.DataFrame)
+    True
+    >>> df
+       0  1
+    0  1  2
+    1  3  4
+    0  5  6
+    2  7  8
+
+    >>> df1 = pd.DataFrame([[1, 2], [3, 4]], index=[0, 1], columns=["a", "b"])
+    >>> df2 = pd.DataFrame([[5, 6], [7, 8]], index=[0, 2], columns=["c", "d"])
+    >>> df = union_dataframes_by_name([df1, df2])
+    >>> isinstance(df, pd.DataFrame)
+    True
+    >>> df
+         a    b    c    d
+    0  1.0  2.0  NaN  NaN
+    1  3.0  4.0  NaN  NaN
+    0  NaN  NaN  5.0  6.0
+    2  NaN  NaN  7.0  8.0
+
+    >>> df1 = pd.DataFrame([[1, 2], [3, 4]])
+    >>> s1 = pd.Series([5, 6])
+    >>> df = union_dataframes_by_name(df1, s1)
+    >>> isinstance(df, pd.DataFrame)
+    True
+    >>> df
+       0    1
+    0  1  2.0
+    1  3  4.0
+    0  5  NaN
+    1  6  NaN
+
+    >>> s1 = pd.Series([1, 2])
+    >>> s2 = pd.Series([3, 4])
+    >>> s3 = pd.Series([5, 6])
+    >>> df = union_dataframes_by_name([s1, s2], s3)
+    >>> isinstance(df, pd.DataFrame)
+    True
+    >>> df
+       0
+    0  1
+    1  2
+    0  3
+    1  4
+    0  5
+    1  6
+
+    >>> s1 = pd.Series([1, 2], index=[0, 1], name="a")
+    >>> s2 = pd.Series([3, 4], index=[1, 2], name="b")
+    >>> s3 = pd.Series([5, 6], index=[2, 3], name="c")
+    >>> df = union_dataframes_by_name(s1, s2, s3)
+    >>> isinstance(df, pd.DataFrame)
+    True
+    >>> df
+         a    b    c
+    0  1.0  NaN  NaN
+    1  2.0  NaN  NaN
+    1  NaN  3.0  NaN
+    2  NaN  4.0  NaN
+    2  NaN  NaN  5.0
+    3  NaN  NaN  6.0
+    """
+    it = (
+        obj.to_frame() if isinstance(obj, pd.Series) else obj
+        for obj in flatten(dataframes)
+    )
+    return pd.DataFrame(pd.concat(it, axis=0))
