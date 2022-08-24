@@ -25,7 +25,7 @@ def test_freq(datatype):
     pd.testing.assert_frame_equal(actual, expected)
 
 
-def test_join_pandas_dataframes_by_index():
+def test_join_dataframes_by_index():
     idx = (0, 1)
 
     cols1 = ("a", "b")
@@ -38,6 +38,6 @@ def test_join_pandas_dataframes_by_index():
 
     expected = pd.DataFrame([row11 + row21, row12 + row22], idx, cols1 + cols2)
 
-    actual = pandastools.join_pandas_dataframes_by_index(df1, df2)
+    actual = pandastools.join_dataframes_by_index(df1, df2)
     assert isinstance(actual, pd.DataFrame)
     pd.testing.assert_frame_equal(actual, expected)
