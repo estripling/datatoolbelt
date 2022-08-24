@@ -65,7 +65,7 @@ def join_dataframes_by_index(*dataframes):
     Returns
     -------
     pandas.DataFrame
-        A single dataframe with all joined columns.
+        A new dataframe with all columns.
 
     Examples
     --------
