@@ -144,7 +144,8 @@ def union_dataframes_by_name(*dataframes):
 
     Notes
     -----
-    Inspired by the unionByName method of spark dataframe.
+    - Inspired by the unionByName method of spark dataframe.
+    - Deduplication is not performed on the returned dataframe.
 
     Examples
     --------
@@ -159,6 +160,18 @@ def union_dataframes_by_name(*dataframes):
     1  3  4
     0  5  6
     1  7  8
+
+    >>> df1 = pd.DataFrame([[1, 1], [1, 1]])
+    >>> df2 = pd.DataFrame([[1, 1], [1, 1]])
+    >>> df = union_dataframes_by_name(df1, df2)
+    >>> isinstance(df, pd.DataFrame)
+    True
+    >>> df
+       0  1
+    0  1  1
+    1  1  1
+    0  1  1
+    1  1  1
 
     >>> df1 = pd.DataFrame([[1, 2], [3, 4]], index=[0, 1])
     >>> df2 = pd.DataFrame([[5, 6], [7, 8]], index=[0, 2])
