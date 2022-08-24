@@ -5,7 +5,7 @@ from bumbag.core import flatten
 def freq(values):
     """Compute value frequencies.
 
-    Given a collection of values, calculate for each value:
+    Given an iterable of values, calculate for each distinct value:
      - the frequency (``n``),
      - the cumulative frequency (``N``),
      - the relative frequency (``r``), and
@@ -13,17 +13,16 @@ def freq(values):
 
     Parameters
     ----------
-    values : array_like
-        Collection of values to evaluate.
+    values : Iterable of Any
+        An iterable of values to compute the frequencies of its members.
 
     Returns
     -------
     pandas.DataFrame
-        Frequencies of each distinct value.
+        Frequencies of distinct values.
 
     Examples
     --------
-    >>> import pandas as pd
     >>> x = ["a", "c", "b", "g", "h", "a", "g", "a"]
     >>> frequency = freq(x)
     >>> isinstance(frequency, pd.DataFrame)
