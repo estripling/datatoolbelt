@@ -74,6 +74,8 @@ install:
 .PHONY: update_dependencies
 update_dependencies:
 	$(POETRY) update
+	$(POETRY) add pandas@latest
+	$(POETRY) add bumbag@latest
 
 
 ## test :: Run tests with coverage report
