@@ -5,7 +5,7 @@ from bumbag.core import flatten
 def freq(values):
     """Compute value frequencies.
 
-    Given an iterable of values, calculate for each distinct value:
+    Given an input array, calculate for each distinct value:
      - the frequency (``n``),
      - the cumulative frequency (``N``),
      - the relative frequency (``r``), and
@@ -13,8 +13,9 @@ def freq(values):
 
     Parameters
     ----------
-    values : Iterable of Any
-        An iterable of values to compute the frequencies of its members.
+    values : array-like
+        An input array of values to compute the frequencies of its members.
+        It must be 1-dimensional.
 
     Returns
     -------
