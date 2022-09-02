@@ -1,5 +1,71 @@
+import numpy as np
 import pandas as pd
 from bumbag.core import flatten
+
+
+def entropy(values):
+    """Compute the Shannon entropy for discrete values.
+
+    The Shannon entropy of a discrete random variable :math:`X` with support
+    :math:`\\mathcal{X} \\subseteq \\Omega` and probability mass function
+    :math:`p(x) = \\Pr(X = x) \\in (0, 1]` is
+
+    .. math::
+
+        H(X) \\triangleq \\mathbb{E}[ -\\log_{2} p(X) ]
+        = - \\sum_{x \\in \\mathcal{X}} p(x) \\log_{2} p(x) \\in [0, \\infty).
+
+    Parameters
+    ----------
+    values : array-like
+        An input array for which entropy is to be computed.
+        It must be 1-dimensional.
+
+    Returns
+    -------
+    float
+        Shannon entropy with log to the base 2.
+        Returns NaN if input array is empty.
+
+    References
+    ----------
+    .. [1] C. E. Shannon, "A Mathematical Theory of Communication,"
+           in The Bell System Technical Journal, vol. 27, no. 3, pp. 379-423,
+           July 1948, doi: 10.1002/j.1538-7305.1948.tb01338.x.
+
+    Examples
+    --------
+    >>> entropy([])
+    nan
+
+    >>> entropy(["a", "a"])
+    0.0
+
+    >>> entropy(["a", "b"])
+    1.0
+
+    >>> entropy(["a", "b", "c", "d"])
+    2.0
+    """
+    if len(values) == 0:
+        return float("nan")
+
+    counts = (
+        pd.Series(values)
+        .value_counts(normalize=False, sort=False, dropna=False)
+        .values
+    )
+
+    if len(counts) == 1:
+        return 0.0
+
+    total = counts.sum()
+
+    return float(
+        np.log2(total)
+        if len(counts) == total
+        else np.log2(total) - (counts * np.log2(counts)).sum() / total
+    )
 
 
 def freq(values):

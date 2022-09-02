@@ -5,6 +5,53 @@ import pytest
 from datatoolbelt import pandastools
 
 
+@pytest.mark.parametrize(
+    "values",
+    [
+        [],
+        ["a"],
+        ["a", "a"],
+        ["a", "b"],
+        ["a", "b", "c", "d"],
+        ["a", "a", "a", "a"],
+        ["a", "a", "b", "b"],
+        ["a", "b", "b", "c", "c", "c"],
+        ["a", "a", "b", "b", "a", "a", "a"],
+        ["a", "a", "b", "b", "c", "c", "d", "d"],
+        [1],
+        [1.0] * 4,
+        [1, 1, 2],
+        [1 / 3, 1 / 3, 1 / 3],
+        [np.pi, np.e, np.sqrt(2), np.pi],
+        [1, 2, 3, 4, 5],
+        range(10),
+        [1, 2, np.nan, 4, 5, np.nan],
+        [None] * 4,
+        [float("nan")] * 4,
+        [np.nan] * 4,
+        [True],
+        [True] * 4,
+        [True, False],
+        [True, False] * 2,
+        [True, False, True, False, True],
+    ],
+)
+def test_entropy(values):
+    actual = pandastools.entropy(values)
+    assert isinstance(actual, float)
+
+    if len(values) == 0:
+        assert np.isnan(actual)
+    else:
+        probs = (
+            pd.Series(values)
+            .value_counts(normalize=True, sort=False, dropna=False)
+            .values
+        )
+        expected = 0.0 if len(probs) == 1 else -(probs * np.log2(probs)).sum()
+        np.testing.assert_almost_equal(actual, expected)
+
+
 @pytest.mark.parametrize("datatype", [list, tuple, np.array, pd.Series])
 def test_freq(datatype):
     values = datatype(["a", "c", "b", "g", "h", "a", "g", "a"])
