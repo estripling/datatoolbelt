@@ -3,6 +3,71 @@ import pandas as pd
 from bumbag.core import flatten
 
 
+def efficiency(values):
+    """Compute efficiency (or normalized Shannon entropy) for discrete values.
+
+    Let :math:`|\\mathcal{X}| = \\kappa` be the cardinality of the support
+    :math:`\\mathcal{X} \\subseteq \\Omega` of a discrete random variable
+    :math:`X`. In other words, :math:`\\kappa` is the number of distinct
+    values of :math:`\\mathcal{X}`. It can be shown that entropy :math:`H(X)`
+    is bounded by :math:`0 \\leq H(X) \\leq \\log_{2} \\kappa`. Hence,
+    efficiency is defined as
+
+    .. math::
+
+        \\eta(X) \\triangleq \\frac{H(X)}{\\log_{2} \\kappa}
+        = - \\frac{1}{\\log_{2} \\kappa}
+        \\sum_{x \\in \\mathcal{X}} p(x) \\log_{2} p(x) \\in [0, 1].
+
+    Parameters
+    ----------
+    values : array-like
+        An input array for which efficiency is to be computed.
+        It must be 1-dimensional.
+
+    Returns
+    -------
+    float
+        Normalized Shannon entropy with log to the base 2.
+        Returns NaN if input array is empty.
+
+    Examples
+    --------
+    >>> efficiency([])
+    nan
+
+    >>> efficiency(["a", "a"])
+    0.0
+
+    >>> efficiency(["a", "b"])
+    1.0
+
+    >>> efficiency(["a", "b", "c", "d"])
+    1.0
+    """
+    if len(values) == 0:
+        return float("nan")
+
+    counts = (
+        pd.Series(values)
+        .value_counts(normalize=False, sort=False, dropna=False)
+        .values
+    )
+
+    if len(counts) == 1:
+        return 0.0
+
+    total = counts.sum()
+
+    h = (
+        np.log2(total)
+        if len(counts) == total
+        else np.log2(total) - (counts * np.log2(counts)).sum() / total
+    )
+
+    return float(h / np.log2(len(counts)))
+
+
 def entropy(values):
     """Compute the Shannon entropy for discrete values.
 
