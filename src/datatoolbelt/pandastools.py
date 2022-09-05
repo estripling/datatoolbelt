@@ -183,20 +183,20 @@ def freq(values):
 
 
 def join_dataframes_by_index(*dataframes):
-    """Join multiple dataframes by their index.
+    """Join multiple data frames by their index.
 
     Parameters
     ----------
     dataframes : sequence of pandas.DataFrame and pandas.Series
-        Dataframes to join. Being a variadic function, it can handle in one
-        call both cases when dataframes are given individually and when they
+        Data frames to join. Being a variadic function, it can handle in one
+        call both cases when data frames are given individually and when they
         are given in a sequence. The function also accepts pandas series.
-        If an object is of type pandas.Series, it is converted to a dataframe.
+        If an object is of type pandas.Series, it is converted to a data frame.
 
     Returns
     -------
     pandas.DataFrame
-        A new dataframe with all columns.
+        A new data frame with all columns.
 
     Examples
     --------
@@ -259,25 +259,25 @@ def join_dataframes_by_index(*dataframes):
 
 
 def union_dataframes_by_name(*dataframes):
-    """Union multiple dataframes by their name.
+    """Union multiple data frames by their name.
 
     Parameters
     ----------
     dataframes : sequence of pandas.DataFrame and pandas.Series
-        Dataframes to union. Being a variadic function, it can handle in one
-        call both cases when dataframes are given individually and when they
+        Data frames to union. Being a variadic function, it can handle in one
+        call both cases when data frames are given individually and when they
         are given in a sequence. The function also accepts pandas series.
-        If an object is of type pandas.Series, it is converted to a dataframe.
+        If an object is of type pandas.Series, it is converted to a data frame.
 
     Returns
     -------
     pandas.DataFrame
-        A new dataframe with all rows.
+        A new data frame with all rows.
 
     Notes
     -----
-    - Inspired by the unionByName method of spark dataframe.
-    - Deduplication is not performed on the returned dataframe.
+    - Inspired by the unionByName method of a Spark DataFrame.
+    - Deduplication is not performed on the returned data frame.
 
     Examples
     --------
