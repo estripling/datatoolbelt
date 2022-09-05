@@ -3,7 +3,7 @@ import pandas as pd
 from bumbag.core import flatten
 
 
-def efficiency(values):
+def efficiency(values, dropna=True):
     """Compute efficiency (or normalized Shannon entropy) for discrete values.
 
     Let :math:`|\\mathcal{X}| = \\kappa` be the cardinality of the support
@@ -24,6 +24,10 @@ def efficiency(values):
     values : array-like
         An input array for which efficiency is to be computed.
         It must be 1-dimensional.
+    dropna : bool, default=True
+        Specify if null values should be excluded from the computation.
+        When input array consists of only null values, function returns NaN if
+        ``dropna=True`` and 0.0 if ``dropna=False``.
 
     Returns
     -------
@@ -50,9 +54,12 @@ def efficiency(values):
 
     counts = (
         pd.Series(values)
-        .value_counts(normalize=False, sort=False, dropna=False)
+        .value_counts(normalize=False, sort=False, dropna=dropna)
         .values
     )
+
+    if len(counts) == 0:
+        return float("nan")
 
     if len(counts) == 1:
         return 0.0
@@ -68,7 +75,7 @@ def efficiency(values):
     return float(h / np.log2(len(counts)))
 
 
-def entropy(values):
+def entropy(values, dropna=True):
     """Compute the Shannon entropy for discrete values.
 
     The Shannon entropy of a discrete random variable :math:`X` with support
@@ -85,6 +92,10 @@ def entropy(values):
     values : array-like
         An input array for which entropy is to be computed.
         It must be 1-dimensional.
+    dropna : bool, default=True
+        Specify if null values should be excluded from the computation.
+        When input array consists of only null values, function returns NaN if
+        ``dropna=True`` and 0.0 if ``dropna=False``.
 
     Returns
     -------
@@ -117,9 +128,12 @@ def entropy(values):
 
     counts = (
         pd.Series(values)
-        .value_counts(normalize=False, sort=False, dropna=False)
+        .value_counts(normalize=False, sort=False, dropna=dropna)
         .values
     )
+
+    if len(counts) == 0:
+        return float("nan")
 
     if len(counts) == 1:
         return 0.0

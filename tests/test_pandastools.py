@@ -36,8 +36,9 @@ from datatoolbelt import pandastools
         [True, False, True, False, True],
     ],
 )
-def test_efficiency(values):
-    actual = pandastools.efficiency(values)
+@pytest.mark.parametrize("dropna", [True, False])
+def test_efficiency(values, dropna):
+    actual = pandastools.efficiency(values, dropna)
     assert isinstance(actual, float)
 
     if len(values) == 0:
@@ -45,11 +46,13 @@ def test_efficiency(values):
     else:
         probs = (
             pd.Series(values)
-            .value_counts(normalize=True, sort=False, dropna=False)
+            .value_counts(normalize=True, sort=False, dropna=dropna)
             .values
         )
         expected = (
-            0.0
+            float("nan")
+            if len(probs) == 0
+            else 0.0
             if len(probs) == 1
             else -(probs * np.log2(probs)).sum() / np.log2(len(probs))
         )
@@ -87,8 +90,9 @@ def test_efficiency(values):
         [True, False, True, False, True],
     ],
 )
-def test_entropy(values):
-    actual = pandastools.entropy(values)
+@pytest.mark.parametrize("dropna", [True, False])
+def test_entropy(values, dropna):
+    actual = pandastools.entropy(values, dropna)
     assert isinstance(actual, float)
 
     if len(values) == 0:
@@ -96,10 +100,16 @@ def test_entropy(values):
     else:
         probs = (
             pd.Series(values)
-            .value_counts(normalize=True, sort=False, dropna=False)
+            .value_counts(normalize=True, sort=False, dropna=dropna)
             .values
         )
-        expected = 0.0 if len(probs) == 1 else -(probs * np.log2(probs)).sum()
+        expected = (
+            float("nan")
+            if len(probs) == 0
+            else 0.0
+            if len(probs) < 2
+            else -(probs * np.log2(probs)).sum()
+        )
         np.testing.assert_almost_equal(actual, expected)
 
 
