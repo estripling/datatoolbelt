@@ -1,3 +1,5 @@
+import functools
+
 import numpy as np
 import pandas as pd
 from bumbag.core import flatten
@@ -318,6 +320,58 @@ def mode(values, dropna=True):
         return float("nan")
 
     return counts.index[0], counts.iloc[0]
+
+
+def profile(dataframe, dropna=True):
+    """Profile data frame by compute summary measures of its columns.
+
+    Parameters
+    ----------
+    dataframe : pandas.DataFrame
+        An input data frame to profile.
+    dropna : bool, default=True
+        Specify if null values should be excluded from the computation.
+
+    Returns
+    -------
+    pandas.DataFrame
+        A new data frame with column summary measures.
+    """
+
+    def compute_mode(values, drop_na, index):
+        try:
+            return mode(values, drop_na)[index]
+        except (IndexError, TypeError):
+            return float("nan")
+
+    mode_value = functools.partial(compute_mode, drop_na=dropna, index=0)
+    mode_freq = functools.partial(compute_mode, drop_na=dropna, index=1)
+    eff = functools.partial(efficiency, dropna=dropna)
+
+    return join_dataframes_by_index(
+        dataframe.dtypes.apply(str).to_frame("type"),
+        dataframe.count().to_frame("count"),
+        dataframe.isnull().sum().to_frame("isnull"),
+        dataframe.nunique().to_frame("unique"),
+        dataframe.apply(mode_value).to_frame("top"),
+        dataframe.apply(mode_freq).to_frame("freq"),
+        dataframe.mean(numeric_only=True).to_frame("mean"),
+        dataframe.std(numeric_only=True, ddof=1).to_frame("std"),
+        dataframe.min(numeric_only=True).to_frame("min"),
+        dataframe.quantile(0.05, numeric_only=True).to_frame("5%"),
+        dataframe.quantile(0.25, numeric_only=True).to_frame("25%"),
+        dataframe.quantile(0.50, numeric_only=True).to_frame("50%"),
+        dataframe.quantile(0.75, numeric_only=True).to_frame("75%"),
+        dataframe.quantile(0.95, numeric_only=True).to_frame("95%"),
+        dataframe.max(numeric_only=True).to_frame("max"),
+        dataframe.skew(numeric_only=True).to_frame("skewness"),
+        dataframe.kurt(numeric_only=True).to_frame("kurtosis"),
+        dataframe.apply(eff).to_frame("efficiency"),
+    ).assign(
+        pct_isnull=lambda df: df["isnull"] / dataframe.shape[0],
+        pct_unique=lambda df: df["unique"] / dataframe.shape[0],
+        pct_freq=lambda df: df["freq"] / dataframe.shape[0],
+    )
 
 
 def union_dataframes_by_name(*dataframes):
