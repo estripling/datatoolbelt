@@ -198,52 +198,6 @@ def freq(values, dropna=True):
     )
 
 
-def mode(values, dropna=True):
-    """Compute the most frequent value.
-
-    Parameters
-    ----------
-    values : array-like
-        An input array for which mode is to be computed.
-        It must be 1-dimensional.
-    dropna : bool, default=True
-        Specify if null values should be excluded from the computation.
-        When input array consists of only null values, function returns NaN if
-        ``dropna=True`` and mode of null values if ``dropna=False``.
-
-    Returns
-    -------
-    tuple
-        Mode and its frequency. Returns NaN if input array is empty.
-
-    Examples
-    --------
-    >>> mode([])
-    nan
-
-    >>> mode([None, None])
-    nan
-
-    >>> mode([None, None], dropna=False)
-    (None, 2)
-
-    >>> mode([1, None, 1, 1, None, 2, None, None])
-    (1.0, 3)
-
-    >>> mode([1, None, 1, 1, None, 2, None, None], dropna=False)
-    (nan, 4)
-    """
-    if len(values) == 0:
-        return float("nan")
-
-    counts = pd.Series(values).value_counts(dropna=dropna)
-
-    if len(counts) == 0:
-        return float("nan")
-
-    return counts.index[0], counts.iloc[0]
-
-
 def join_dataframes_by_index(*dataframes):
     """Join multiple data frames by their index.
 
@@ -318,6 +272,52 @@ def join_dataframes_by_index(*dataframes):
     3  NaN  NaN  6.0
     """
     return pd.concat(map(pd.DataFrame, flatten(dataframes)), axis=1)
+
+
+def mode(values, dropna=True):
+    """Compute the most frequent value.
+
+    Parameters
+    ----------
+    values : array-like
+        An input array for which mode is to be computed.
+        It must be 1-dimensional.
+    dropna : bool, default=True
+        Specify if null values should be excluded from the computation.
+        When input array consists of only null values, function returns NaN if
+        ``dropna=True`` and mode of null values if ``dropna=False``.
+
+    Returns
+    -------
+    tuple
+        Mode and its frequency. Returns NaN if input array is empty.
+
+    Examples
+    --------
+    >>> mode([])
+    nan
+
+    >>> mode([None, None])
+    nan
+
+    >>> mode([None, None], dropna=False)
+    (None, 2)
+
+    >>> mode([1, None, 1, 1, None, 2, None, None])
+    (1.0, 3)
+
+    >>> mode([1, None, 1, 1, None, 2, None, None], dropna=False)
+    (nan, 4)
+    """
+    if len(values) == 0:
+        return float("nan")
+
+    counts = pd.Series(values).value_counts(dropna=dropna)
+
+    if len(counts) == 0:
+        return float("nan")
+
+    return counts.index[0], counts.iloc[0]
 
 
 def union_dataframes_by_name(*dataframes):
