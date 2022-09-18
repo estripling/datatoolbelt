@@ -1,8 +1,8 @@
 import functools
 
+import bumbag as bb
 import numpy as np
 import pandas as pd
-from bumbag.core import flatten
 
 __all__ = (
     "efficiency",
@@ -283,7 +283,7 @@ def join_dataframes_by_index(*dataframes):
     2  NaN  4.0  5.0
     3  NaN  NaN  6.0
     """
-    return pd.concat(map(pd.DataFrame, flatten(dataframes)), axis=1)
+    return pd.concat(map(pd.DataFrame, bb.flatten(dataframes)), axis=1)
 
 
 def mode(values, dropna=True):
@@ -497,4 +497,4 @@ def union_dataframes_by_name(*dataframes):
     2  NaN  NaN  5.0
     3  NaN  NaN  6.0
     """
-    return pd.concat(map(pd.DataFrame, flatten(dataframes)), axis=0)
+    return pd.concat(map(pd.DataFrame, bb.flatten(dataframes)), axis=0)
