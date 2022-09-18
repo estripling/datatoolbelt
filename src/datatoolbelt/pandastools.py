@@ -147,7 +147,7 @@ def entropy(values, dropna=True):
     )
 
 
-def freq(values):
+def freq(values, dropna=True):
     """Compute value frequencies.
 
     Given an input array, calculate for each distinct value:
@@ -161,6 +161,8 @@ def freq(values):
     values : array-like
         An input array of values to compute the frequencies of its members.
         It must be 1-dimensional.
+    dropna : bool, default=True
+        Specify if null values should be excluded from the computation.
 
     Returns
     -------
@@ -186,7 +188,7 @@ def freq(values):
             sort=True,
             ascending=False,
             bins=None,
-            dropna=False,
+            dropna=dropna,
         ),
         columns=["n"],
     ).assign(
