@@ -4,6 +4,16 @@ import numpy as np
 import pandas as pd
 from bumbag.core import flatten
 
+__all__ = [
+    "efficiency",
+    "entropy",
+    "freq",
+    "join_dataframes_by_index",
+    "mode",
+    "profile",
+    "union_dataframes_by_name",
+]
+
 
 def efficiency(values, dropna=True):
     """Compute efficiency (or normalized Shannon entropy) for discrete values.
