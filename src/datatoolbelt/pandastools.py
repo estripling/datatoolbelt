@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 from bumbag.core import flatten
 
-__all__ = [
+__all__ = (
     "efficiency",
     "entropy",
     "freq",
@@ -12,7 +12,7 @@ __all__ = [
     "mode",
     "profile",
     "union_dataframes_by_name",
-]
+)
 
 
 def efficiency(values, dropna=True):
