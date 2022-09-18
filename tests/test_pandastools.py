@@ -133,6 +133,60 @@ def test_freq(datatype):
     pd.testing.assert_frame_equal(actual, expected)
 
 
+@pytest.mark.parametrize(
+    "values",
+    [
+        [],
+        ["a"],
+        ["a", "a"],
+        ["a", "b"],
+        ["a", "b", "c", "d"],
+        ["a", "a", "a", "a"],
+        ["a", "a", "b", "b"],
+        ["a", "b", "b", "c", "c", "c"],
+        ["a", "a", "b", "b", "a", "a", "a"],
+        ["a", "a", "b", "b", "c", "c", "d", "d"],
+        [1],
+        [1.0] * 4,
+        [1, 1, 2],
+        [1 / 3, 1 / 3, 1 / 3],
+        [np.pi, np.e, np.sqrt(2), np.pi],
+        [1, 2, 3, 4, 5],
+        range(10),
+        [1, 2, np.nan, 4, 5, np.nan],
+        [None] * 4,
+        [float("nan")] * 4,
+        [np.nan] * 4,
+        [True],
+        [True] * 4,
+        [True, False],
+        [True, False] * 2,
+        [True, False, True, False, True],
+    ],
+)
+@pytest.mark.parametrize("dropna", [True, False])
+def test_mode(values, dropna):
+    actual = pandastools.mode(values, dropna)
+    counts = pd.Series(values, dtype="object").value_counts(dropna=dropna)
+
+    if len(values) == 0:
+        assert pd.isnull(actual)
+
+    elif len(counts) == 0:
+        assert pd.isnull(actual)
+
+    else:
+        assert isinstance(actual, tuple)
+        mode_value, mode_freq = counts.index[0], counts.iloc[0]
+
+        if dropna or (dropna is False and not pd.isnull(mode_value)):
+            assert actual == (mode_value, mode_freq)
+
+        else:
+            # dropna is False and pd.isnull(mode_value):
+            assert actual[1] == mode_freq
+
+
 def test_join_dataframes_by_index():
     idx = (0, 1)
 
