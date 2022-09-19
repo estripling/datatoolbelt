@@ -165,7 +165,7 @@ dev = ["build (==0.8.0)", "flake8 (==4.0.1)", "hashin (==0.17.0)", "pip-tools (=
 
 [[package]]
 name = "bumbag"
-version = "3.1.0"
+version = "3.1.1"
 description = "A package for Python utility functions."
 category = "main"
 optional = false
@@ -1998,7 +1998,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "681dd86c42c522d2e2da7793c3ee3c397525a0977a20b4b2501a910919141295"
+content-hash = "857d2c0d79c8e732267252928497fe49810558032e21947e09d9c77f752c695f"
 
 [metadata.files]
 alabaster = [

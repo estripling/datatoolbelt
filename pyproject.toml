@@ -19,7 +19,7 @@ classifiers = [
 [tool.poetry.dependencies]
 python = "^3.8"
 pandas = "^1.4.4"
-bumbag = "^3.1.0"
+bumbag = "^3.1.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.1.2"
