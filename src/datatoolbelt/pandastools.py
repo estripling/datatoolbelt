@@ -8,6 +8,7 @@ __all__ = (
     "efficiency",
     "entropy",
     "freq",
+    "freq_columns",
     "join_dataframes_by_index",
     "mode",
     "profile",
@@ -196,7 +197,7 @@ def freq(values, dropna=True):
     h  1  8  0.125  1.000
     """
     return pd.DataFrame(
-        data=pd.Series(values).value_counts(
+        data=pd.Series(iter(values)).value_counts(
             sort=True,
             ascending=False,
             bins=None,
@@ -208,6 +209,31 @@ def freq(values, dropna=True):
         r=lambda df: df["n"] / df["n"].sum(),
         R=lambda df: df["r"].cumsum(),
     )
+
+
+def freq_columns(dataframe, dropna=True):
+    """Apply the freq() function to each data frame column.
+
+    Parameters
+    ----------
+    dataframe : pandas.DataFrame
+        An input data frame to compute the value frequencies of each column.
+    dropna : bool, default=True
+        Specify if null values should be excluded from the computation.
+
+    Returns
+    -------
+    dict of pandas.DataFrame
+        A dictionary with column names as keys and the corresponding output of
+        freq() as values.
+
+    See Also
+    --------
+    datatoolbelt.pandastools.freq : Compute value frequencies.
+    """
+    return {
+        column: freq(dataframe[column], dropna) for column in dataframe.columns
+    }
 
 
 def join_dataframes_by_index(*dataframes):
