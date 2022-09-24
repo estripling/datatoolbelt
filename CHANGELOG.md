@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.0 (2022-09-24)
+### Feature
+* **pandastools.py:** Add count_share to profile ([`2dcb702`](https://github.com/estripling/datatoolbelt/commit/2dcb702786c37033532449391eee070f738c1280))
+* **pandastools.py:** Add freq_columns ([`6798f73`](https://github.com/estripling/datatoolbelt/commit/6798f7330fb84128cd279fe3738e7f6541bcb6ab))
+
 ## v0.2.0 (2022-09-18)
 ### Feature
 * **pandastools.py:** Add profile ([`41b2f8d`](https://github.com/estripling/datatoolbelt/commit/41b2f8d5658af66e92efc31ce5298378847f7705))
