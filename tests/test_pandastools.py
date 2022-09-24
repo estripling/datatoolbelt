@@ -275,6 +275,7 @@ def test_profile():
             "skewness": {"a": float("nan"), "b": 0.0, "c": float("nan")},
             "kurtosis": {"a": float("nan"), "b": 0.0, "c": float("nan")},
             "efficiency": {"a": 0.97095059445466, "b": 0.0, "c": float("nan")},
+            "cnt_share90%": {"a": 1, "b": 0, "c": 0},
             "pct_isnull": {"a": 0.16666666666666, "b": 0.0, "c": 1.0},
             "pct_unique": {"a": 0.33333333333, "b": 0.166666666666, "c": 0.0},
             "pct_freq": {"a": 0.5, "b": 1.0, "c": float("nan")},
