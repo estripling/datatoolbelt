@@ -380,9 +380,15 @@ def profile(dataframe, dropna=True):
         except (IndexError, TypeError):
             return float("nan")
 
+    def count_share(frequencies, threshold):
+        return pd.Series(
+            {k: v[v["R"] < threshold].shape[0] for k, v in frequencies.items()}
+        ).to_frame(f"cnt_share{int(threshold * 100)}%")
+
     mode_value = functools.partial(compute_mode, drop_na=dropna, index=0)
     mode_freq = functools.partial(compute_mode, drop_na=dropna, index=1)
     eff = functools.partial(efficiency, dropna=dropna)
+    column_frequencies = freq_columns(dataframe, dropna)
 
     return join_dataframes_by_index(
         dataframe.dtypes.apply(str).to_frame("type"),
@@ -403,6 +409,7 @@ def profile(dataframe, dropna=True):
         dataframe.skew(numeric_only=True).to_frame("skewness"),
         dataframe.kurt(numeric_only=True).to_frame("kurtosis"),
         dataframe.apply(eff).to_frame("efficiency"),
+        count_share(column_frequencies, 0.90),
     ).assign(
         pct_isnull=lambda df: df["isnull"] / dataframe.shape[0],
         pct_unique=lambda df: df["unique"] / dataframe.shape[0],
